@@ -2,9 +2,11 @@
   "name": "spotme-backend",
   "version": "1.0.0",
   "description": "SpotMe uses your Spotify data to create quizzes to test your musical knowledge. Only a free Spotify subscription is required.",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prestart": "npm run build",
     "start": "node ."
   },
   "repository": {
@@ -25,6 +27,5 @@
     "sequelize": "^6.6.5",
     "typescript": "^4.4.2",
     "typescript-eslint": "^0.0.1-alpha.0"
-  },
-  "type": "module"
+  }
 }
