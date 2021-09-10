@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { Strategy as SpotifyStrategy } from 'passport-spotify';
 import passport from 'passport';
 
@@ -47,18 +47,11 @@ router.get('/logout', function (req, res) {
     res.sendStatus(204);
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Request = any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Response = any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Next = any;
-
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),
 //   the request will proceed. Otherwise, an error is return.
-function authenticateUser(req: Request, res: Response, next: Next): unknown {
+function authenticateUser(req: Request, res: Response, next: NextFunction): void {
     if (req.isAuthenticated()) {
         return next();
     }
