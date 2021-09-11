@@ -5,11 +5,12 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --quiet --fix",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prebuild": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node ."
+    "start": "node .",
+    "start:dev": "ts-node-dev ./src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -23,8 +24,6 @@
   },
   "homepage": "https://github.com/chingu-voyages/v33-bears-team-10be#readme",
   "dependencies": {
-    "@types/express": "^4.17.13",
-    "@types/node": "^16.7.13",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "passport": "^0.4.1",
@@ -34,6 +33,8 @@
     "typescript-eslint": "^0.0.1-alpha.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.7.13",
     "@types/passport": "^1.0.7",
     "@types/passport-spotify": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
@@ -41,7 +42,8 @@
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "7.0.2",
     "lint-staged": "11.1.2",
-    "prettier": "^2.3.2"
+    "prettier": "^2.3.2",
+    "ts-node-dev": "^1.1.8"
   },
   "husky": {
     "hooks": {
@@ -50,7 +52,7 @@
   },
   "lint-staged": {
     "src/**/*.ts": [
-      "eslint --fix",
+      "eslint . --ext .js,.jsx,.ts,.tsx",
       "git add"
     ]
   }
