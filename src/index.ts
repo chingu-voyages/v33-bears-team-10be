@@ -24,12 +24,11 @@ import { router as authRouter } from './routes/auth';
 
 app.use('/auth', authRouter);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.get('/', function (req, res) {
+app.get('/', function (_req, res) {
     res.send('Hello World');
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const server = app.listen(PORT, () => {
+const _server = app.listen(PORT, () => {
     console.log('Spotme!');
 });
