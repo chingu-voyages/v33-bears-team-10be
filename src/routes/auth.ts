@@ -17,9 +17,7 @@ passport.use(
         },
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         function (accessToken, refreshToken, expires_in, profile, done) {
-            process.nextTick(function () {
-                return done(null, { accessToken, refreshToken, expires_in, profile });
-            });
+            return done(null, { accessToken, refreshToken, expires_in, profile });
         },
     ),
 );
@@ -31,12 +29,12 @@ router.get(
     }),
 );
 
-router.get('/callback', passport.authenticate('spotify', { failureRedirect: '/failure' }), function (req, res) {
+router.get('/callback', passport.authenticate('spotify', { failureRedirect: '/error' }), function (req, res) {
     res.json(req.user);
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-router.get('/failure', function (req, res) {
+router.get('/error', function (req, res) {
     res.status(404).json({ message: 'Failed to log in to spotify' });
 });
 

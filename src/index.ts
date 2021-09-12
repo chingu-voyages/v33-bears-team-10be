@@ -1,8 +1,24 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
 import passport from 'passport';
+import cookieSession from 'cookie-session';
+
+dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+const SECRET = process.env.SECRET;
+
+const app = express();
+
+app.use(
+    cookieSession({
+        name: 'spotify-auth-session',
+        keys: [SECRET],
+    }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -18,13 +34,6 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
-
-dotenv.config();
-
-const app = express();
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 import { router as authRouter } from './routes/auth';
 
