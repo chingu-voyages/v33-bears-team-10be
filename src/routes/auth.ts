@@ -20,7 +20,7 @@ passport.use(
             const user = {
                 accessToken,
                 displayName: profile.displayName,
-                profileImage: profile.photos[0].valueOf(),
+                profileImage: profile.photos,
                 product: profile.product,
                 id: profile.id,
             };
