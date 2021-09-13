@@ -78,7 +78,7 @@ function authenticateUser(req: RequestWithUser, res: Response, next: NextFunctio
         return next();
     }
 
-    res.status(403).json({ message: 'User needs to be logged in first.' });
+    res.status(401).json({ message: 'User needs to be logged in first.' });
 }
 
 export { router, authenticateUser };

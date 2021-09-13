@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/chingu-voyages/v33-bears-team-10be#readme",
   "dependencies": {
+    "axios": "^0.21.4",
     "cookie-session": "^1.4.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
