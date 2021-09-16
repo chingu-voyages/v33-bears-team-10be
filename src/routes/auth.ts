@@ -1,7 +1,7 @@
 import { Router, Response, NextFunction } from 'express';
 import { Strategy as SpotifyStrategy } from 'passport-spotify';
 import passport from 'passport';
-import { RequestWithUser } from '../types/User';
+import { RequestWithUser, User } from '../types/User';
 
 const router = Router();
 
@@ -40,7 +40,7 @@ passport.serializeUser((user, done) => {
     done(null, user);
 });
 
-passport.deserializeUser((obj: false | Express.User, done) => {
+passport.deserializeUser((obj: false | User, done) => {
     done(null, obj);
 });
 
