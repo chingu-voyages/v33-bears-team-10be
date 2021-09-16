@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/chingu-voyages/v33-bears-team-10be#readme",
   "dependencies": {
+    "axios": "^0.21.4",
     "cookie-session": "^1.4.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
@@ -40,6 +41,7 @@
     "@types/passport": "^1.0.7",
     "@types/passport-spotify": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "7.0.2",
