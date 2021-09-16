@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "prebuild": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node .",
