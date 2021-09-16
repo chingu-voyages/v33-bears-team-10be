@@ -14,7 +14,7 @@ passport.use(
         {
             clientID,
             clientSecret,
-            callbackURL: '/auth/callback',
+            callbackURL: '/api/auth/callback',
         },
         (accessToken, _refreshToken, _expires_in, profile, done) => {
             const user = {
