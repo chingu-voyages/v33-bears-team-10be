@@ -60,7 +60,7 @@ router.get(
 );
 
 router.get('/error', (_, res) => {
-    res.status(404).json({ message: 'Failed to log in to spotify' });
+    res.status(400).json({ message: 'Failed to log in to spotify' });
 });
 
 router.get('/logout', (req, res) => {
