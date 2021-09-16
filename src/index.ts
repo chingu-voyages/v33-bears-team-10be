@@ -22,9 +22,11 @@ app.use(passport.session());
 
 import { router as authRouter } from './routes/auth';
 import { router as playlistRouter } from './routes/playlists';
+import { router as topRouter } from './routes/top';
 
-app.use('/auth', authRouter);
-app.use('/playlists', playlistRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/playlists', playlistRouter);
+app.use('/api/top', topRouter);
 
 app.get('/', function (_req, res) {
     res.send('Hello World');
