@@ -28,7 +28,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/playlists', playlistRouter);
 app.use('/api/top', topRouter);
 
-app.get('/', function (_req, res) {
+app.get('/', function (_req: Request, res: Response) {
     res.send('Hello World');
 });
 
