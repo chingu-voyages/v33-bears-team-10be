@@ -31,9 +31,34 @@ router.get("/tracks", authenticateUser, async (req: RequestWithUser, res: Respon
         const previous = offset == 0 ? null : `${endpoint}/tracks?limit=${limit}&offset=${Math.max(Number(offset) - Number(limit), 0)}`;
         res.json({items, next, previous});
     } catch (error) {
-        console.log(error);
         res.status(400).send(error);
     }
 });
+
+router.get("/artists", async (req: RequestWithUser, res: Response) => {
+    const { accessToken } = req.user;
+    const { limit = 25, offset = 0 } = req.query;
+    const bearer = "Bearer " + accessToken;
+
+    const url = base_url + "/artists";
+    try {
+
+        const { data: { items } } = await axios.get(url, {
+            headers: {
+                Authorization: bearer,
+            },
+            params: {
+                limit,
+                offset,
+            }
+        });
+
+        const next = `${endpoint}/tracks?limit=${limit}&offset=${Number(offset)+ Number(limit)}`;
+        const previous = offset == 0 ? null : `${endpoint}/tracks?limit=${limit}&offset=${Math.max(Number(offset) - Number(limit), 0)}`;
+        res.json({items, next, previous});
+    } catch (error) {
+        res.status(400).send(error);
+    }
+})
 
 export { router };
