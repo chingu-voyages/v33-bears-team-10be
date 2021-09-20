@@ -9,8 +9,7 @@ const spotify_endpoint = 'https://api.spotify.com/v1/me/playlists';
 
 router.get('/', authenticateUser, async (req: RequestWithUser, res: Response) => {
     const user = req.user;
-    const { limit = 10, page = 1 } = req.query;
-    const offset = (Number(page) - 1) * Number(limit);
+    const { limit = 10, offset = 0 } = req.query;
     const bearer = 'Bearer ' + user.accessToken;
 
     const { data } = await axios.get(spotify_endpoint, {
