@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "prebuild": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node .",
@@ -40,7 +39,7 @@
     "@types/node": "^16.7.13",
     "@types/passport": "^1.0.7",
     "@types/passport-spotify": "^2.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
