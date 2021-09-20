@@ -12,5 +12,8 @@ export interface RequestWithUser extends Request {
     user?: User;
     isAuthenticated(): boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    query: any;
+    query: {
+        offset?: string,
+        limit?: string,
+    };
 }
