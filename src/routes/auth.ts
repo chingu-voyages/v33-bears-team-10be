@@ -9,12 +9,14 @@ const clientID = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const scope = ['user-read-email', 'user-read-private', 'user-top-read'];
 
+const callbackURL = process.env.CALLBACK_URL || '/api/auth/callback';
+
 passport.use(
     new SpotifyStrategy(
         {
             clientID,
             clientSecret,
-            callbackURL: '/api/auth/callback',
+            callbackURL,
         },
         (accessToken, _refreshToken, _expires_in, profile, done) => {
             const user = {
