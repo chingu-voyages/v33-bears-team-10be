@@ -22,7 +22,7 @@ passport.use(
             const user = {
                 accessToken,
                 displayName: profile.displayName,
-                profileImage: profile.photos || null,
+                profileImage: profile.photos,
                 product: profile.product,
                 id: profile.id,
             };
@@ -61,6 +61,8 @@ router.get(
         if (typeof req.user.profileImage[0] === 'object') {
             const profileImage: { value: string } = <{ value: string }>req.user.profileImage[0];
             req.user = { ...req.user, profileImage: profileImage.value };
+        } else if (typeof req.user.profileImage[0] === ('undefined' || 'null')) {
+            req.user = { ...req.user, profileImage: null };
         }
         res.json(req.user);
     },
