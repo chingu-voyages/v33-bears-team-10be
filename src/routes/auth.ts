@@ -8,7 +8,6 @@ const router = Router();
 const clientID = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const scope = ['user-read-email', 'user-read-private', 'user-top-read'];
-const port = process.env.PORT || 3000;
 
 const callbackURL = process.env.CALLBACK_URL || '/api/auth/callback';
 
