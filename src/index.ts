@@ -33,6 +33,6 @@ app.get('/', function (_req, res) {
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _server = app.listen(PORT, () => {
-    console.log('Spotme!');
+app.listen(PORT, () => {
+    console.log(`Spotme! Running on port ${PORT}`);
 });
