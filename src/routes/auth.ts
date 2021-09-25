@@ -22,7 +22,7 @@ passport.use(
             const user = {
                 accessToken,
                 displayName: profile.displayName,
-                profileImage: profile.photos[0].valueOf(),
+                profileImage: profile.photos,
                 product: profile.product,
                 id: profile.id,
             };
@@ -57,6 +57,13 @@ router.get(
     '/callback',
     passport.authenticate('spotify', { failureRedirect: '/error' }),
     (req: RequestWithUser, res: Response) => {
+        // profile image returns as an object, but typescript declares it as a string, so we cant access value without the below code.
+        if (typeof req.user.profileImage[0] === 'object') {
+            const profileImage: { value: string } = <{ value: string }>req.user.profileImage[0];
+            req.user = { ...req.user, profileImage: profileImage.value };
+        } else if (typeof req.user.profileImage[0] === ('undefined' || 'null')) {
+            req.user = { ...req.user, profileImage: null };
+        }
         res.json(req.user);
     },
 );
