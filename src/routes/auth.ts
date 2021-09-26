@@ -75,8 +75,11 @@ router.get('/logout', (req, res) => {
 });
 
 router.get('/verify', authenticateUser, (req, res) => {
-    res.json(req.user);
-})
+    // Make sure the access token isnt sent along as json.
+    const response: User = <User>{ ...req.user };
+    response.accessToken = 'Access Verified';
+    res.json(response);
+});
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
