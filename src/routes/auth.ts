@@ -58,13 +58,15 @@ router.get(
     passport.authenticate('spotify', { failureRedirect: '/error' }),
     (req: RequestWithUser, res: Response) => {
         // profile image returns as an object, but typescript declares it as a string, so we cant access value without the below code.
+        // This code does nothign right now, come back and refactor when possible. :)
         if (typeof req.user.profileImage[0] === 'object') {
             const profileImage: { value: string } = <{ value: string }>req.user.profileImage[0];
             req.user = { ...req.user, profileImage: profileImage.value };
         } else if (typeof req.user.profileImage[0] === ('undefined' || 'null')) {
             req.user = { ...req.user, profileImage: null };
         }
-        res.json(req.user);
+
+        res.redirect(process.env.FRONTEND_URL);
     },
 );
 
@@ -87,7 +89,8 @@ function authenticateUser(req: RequestWithUser, res: Response, next: NextFunctio
         return next();
     }
 
-    res.status(401).json({ message: 'User needs to be logged in first.' });
+    res.status(401);
+    res.send({ message: 'user needs to be logged in' });
 }
 
 export { router, authenticateUser };
