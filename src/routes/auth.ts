@@ -21,7 +21,14 @@ passport.use(
         (accessToken, _refreshToken, _expires_in, profile, done) => {
             // profile image returns as an object, but typescript declares it as a [string], so we cant access value without the below code.
             const profileImageArr = <[{ value: string }]>(<unknown>profile.photos);
-            const profileImage = profileImageArr[0].value;
+            let profileImage: string | undefined;
+
+            // in the case of no profile image.
+            if (typeof profileImageArr[0] === 'undefined') {
+                profileImage = 'undefined';
+            } else {
+                profileImage = profileImageArr[0].value;
+            }
             const user = {
                 accessToken,
                 displayName: profile.displayName,
