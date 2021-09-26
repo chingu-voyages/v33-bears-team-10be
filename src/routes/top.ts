@@ -35,7 +35,7 @@ router.get("/tracks", authenticateUser, async (req: RequestWithUser, res: Respon
     }
 });
 
-router.get("/artists", async (req: RequestWithUser, res: Response) => {
+router.get("/artists", authenticateUser, async (req: RequestWithUser, res: Response) => {
     const { accessToken } = req.user;
     const { limit = 25, offset = 0 } = req.query;
     const bearer = "Bearer " + accessToken;
@@ -61,7 +61,7 @@ router.get("/artists", async (req: RequestWithUser, res: Response) => {
     }
 });
 
-router.get("/genres", async (req: RequestWithUser, res: Response) => {
+router.get("/genres", authenticateUser, async (req: RequestWithUser, res: Response) => {
     const { accessToken } = req.user;
     const limit = 50; // The limit of artists I can get from Spotify.
     const bearer = "Bearer " + accessToken;

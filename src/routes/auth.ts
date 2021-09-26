@@ -19,10 +19,20 @@ passport.use(
             callbackURL,
         },
         (accessToken, _refreshToken, _expires_in, profile, done) => {
+            // profile image returns as an object, but typescript declares it as a [string], so we cant access value without the below code.
+            const profileImageArr = <[{ value: string }]>(<unknown>profile.photos);
+            let profileImage: string | undefined;
+
+            // in the case of no profile image.
+            if (typeof profileImageArr[0] === 'undefined') {
+                profileImage = 'undefined';
+            } else {
+                profileImage = profileImageArr[0].value;
+            }
             const user = {
                 accessToken,
                 displayName: profile.displayName,
-                profileImage: profile.photos[0].valueOf(),
+                profileImage,
                 product: profile.product,
                 id: profile.id,
             };
@@ -57,7 +67,7 @@ router.get(
     '/callback',
     passport.authenticate('spotify', { failureRedirect: '/error' }),
     (req: RequestWithUser, res: Response) => {
-        res.json(req.user);
+        res.redirect(process.env.FRONTEND_URL);
     },
 );
 
@@ -71,6 +81,13 @@ router.get('/logout', (req, res) => {
     res.sendStatus(204);
 });
 
+router.get('/verify', authenticateUser, (req, res) => {
+    // Make sure the access token isnt sent along as json.
+    const response: User = <User>{ ...req.user };
+    response.accessToken = 'Access Verified';
+    res.json(response);
+});
+
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),
@@ -80,7 +97,8 @@ function authenticateUser(req: RequestWithUser, res: Response, next: NextFunctio
         return next();
     }
 
-    res.status(401).json({ message: 'User needs to be logged in first.' });
+    res.status(401);
+    res.send({ message: 'user needs to be logged in' });
 }
 
 export { router, authenticateUser };

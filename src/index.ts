@@ -2,13 +2,21 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import passport from 'passport';
 import cookieSession from 'cookie-session';
+import cors from 'cors';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 const SECRET = process.env.SECRET;
 
+const corsOptions = {
+    origin: process.env.FRONTEND_URL,
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    credentials: true,
+};
+
 const app = express();
+app.use(cors(corsOptions));
 
 app.use(
     cookieSession({
@@ -33,6 +41,6 @@ app.get('/', function (_req, res) {
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _server = app.listen(PORT, () => {
-    console.log('Spotme!');
+app.listen(PORT, () => {
+    console.log(`Spotme! Running on port ${PORT}`);
 });
