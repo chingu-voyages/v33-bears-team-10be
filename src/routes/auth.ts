@@ -80,6 +80,10 @@ router.get('/logout', (req, res) => {
     res.sendStatus(204);
 });
 
+router.get('/verify', authenticateUser, (req, res) => {
+    res.json(req.user);
+})
+
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),

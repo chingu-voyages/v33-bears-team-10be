@@ -22,10 +22,11 @@ SpotMe uses your Spotify data to create quizzes to test your musical knowledge. 
 | Route | Purpose | Parameters | HTTP Code | Return |
 |-------|---------|------------|--------|------|
 |`/api/auth`| Authenticate to the Spotify server, will provide a redirect | None | `302`| None
-|`/api/auth/callback`| If authentication with Spotify is successful, you will be redirected here | None| `200` | A `User` object |
+|`/api/auth/callback`| If authentication with Spotify is successful, you will be redirected here | None| `302` | redirect |
 |`/api/auth/error`| If authentication with Spotify is unsuccesful, you will be redirected here | None | `400` | None|
 |`/api/auth/logout`| To log out of Spotify | None| `204`| None |
+|`/api/auth/verify`| Check if user is logged in and retrieve user | None | `200` if logged in, else `401` | A `User` object 
 |`/api/playlists` | Retrieve a user's playlists | **Limit** - The number of entities to return. Default: 20. Minimum: 1. Maximum: 50. <br> **Offset** - The index of the first entity to return. Default: 0 (i.e., the first track). Use with limit to get the next set of entities. | `200` | <br> `{ playlists: [...] }`
-|`api/top/tracks` | Retrieves a user's top tracks | **Limit** - The number of entities to return. Default: 20. Minimum: 1. Maximum: 50. <br> **Offset** - The index of the first entity to return. Default: 0 | `200` | <br> `{ items: [...], next: 'url', previous: null \|\| 'url' }`
-|`api/top/artists` | Retrieves a user's top artists | **Limit** - The number of entities to return. Default: 20. Minimum: 1. Maximum: 50. <br> **Offset** - The index of the first entity to return. Default: 0 | `200` | <br> `{ items: [...], next: 'url', previous: null \|\| 'url' }`
-|`api/top/genres` | Retrieves a user's top genres | None | `200` | <br> `{ items: [...] }`
+|`/api/top/tracks` | Retrieves a user's top tracks | **Limit** - The number of entities to return. Default: 20. Minimum: 1. Maximum: 50. <br> **Offset** - The index of the first entity to return. Default: 0 | `200` | <br> `{ items: [...], next: 'url', previous: null \|\| 'url' }`
+|`/api/top/artists` | Retrieves a user's top artists | **Limit** - The number of entities to return. Default: 20. Minimum: 1. Maximum: 50. <br> **Offset** - The index of the first entity to return. Default: 0 | `200` | <br> `{ items: [...], next: 'url', previous: null \|\| 'url' }`
+|`/api/top/genres` | Retrieves a user's top genres | None | `200` | <br> `{ items: [...] }`
