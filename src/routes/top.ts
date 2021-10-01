@@ -17,7 +17,7 @@ router.get("/tracks", authenticateUser, async (req: RequestWithUser, res: Respon
     const url = base_url + "/tracks";
     try {
 
-        const { data: { items } } = await axios.get(url, {
+        const { data: { items, total } } = await axios.get(url, {
             headers: {
                 Authorization: bearer,
             },
@@ -27,9 +27,27 @@ router.get("/tracks", authenticateUser, async (req: RequestWithUser, res: Respon
             }
         });
 
-        const next = `${endpoint}/tracks?limit=${limit}&offset=${Number(offset)+ Number(limit)}`;
+        // Delete unneeded attributes
+        items.forEach((track: { available_markets: string[]; external_ids: unknown; external_urls: unknown; album: { available_markets: string[], external_urls: unknown } }) => {
+            delete track.available_markets;
+            delete track.external_ids;
+            delete track.external_urls;
+
+            delete track.album.available_markets;
+            delete track.album.external_urls;
+        });
+
+        // If there are anymore items to send, provide a url
+        const next = Number(offset) + Number(limit) < total ? `${endpoint}/tracks?limit=${limit}&offset=${Number(offset)+ Number(limit)}` : null;
+        // If there are 
         const previous = offset == 0 ? null : `${endpoint}/tracks?limit=${limit}&offset=${Math.max(Number(offset) - Number(limit), 0)}`;
-        res.json({items, next, previous});
+        res.json({ 
+            items, 
+            next, 
+            previous, 
+            total, 
+            limit: Number(limit)
+        });
     } catch (error) {
         res.status(400).send(error);
     }
@@ -43,7 +61,7 @@ router.get("/artists", authenticateUser, async (req: RequestWithUser, res: Respo
     const url = base_url + "/artists";
     try {
 
-        const { data: { items } } = await axios.get(url, {
+        const { data: { items, total } } = await axios.get(url, {
             headers: {
                 Authorization: bearer,
             },
@@ -53,7 +71,7 @@ router.get("/artists", authenticateUser, async (req: RequestWithUser, res: Respo
             }
         });
 
-        const next = `${endpoint}/tracks?limit=${limit}&offset=${Number(offset)+ Number(limit)}`;
+        const next = Number(offset) + Number(limit) < total ? `${endpoint}/tracks?limit=${limit}&offset=${Number(offset)+ Number(limit)}` : null;
         const previous = offset == 0 ? null : `${endpoint}/tracks?limit=${limit}&offset=${Math.max(Number(offset) - Number(limit), 0)}`;
         res.json({items, next, previous});
     } catch (error) {
