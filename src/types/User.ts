@@ -6,6 +6,8 @@ export type User = {
     displayName: string;
     profileImage: string;
     product: string;
+    refreshToken: string;
+    tokenExpiration: Date;
 };
 
 export interface RequestWithUser extends Request {

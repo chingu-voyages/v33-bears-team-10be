@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Router, Response } from "express";
 import { RequestWithUser } from "../types/User";
-import { authenticateUser } from "./auth";
+import { authenticateUser, refreshAuthenticationToken } from "./auth";
 
 const router = Router();
 
@@ -9,7 +9,7 @@ const base_url = 'https://api.spotify.com/v1/me/top';
 
 const endpoint = '/api/top'
 
-router.get("/tracks", authenticateUser, async (req: RequestWithUser, res: Response) => {
+router.get("/tracks", authenticateUser, refreshAuthenticationToken, async (req: RequestWithUser, res: Response) => {
     const { accessToken } = req.user;
     const { limit = 25, offset = 0 } = req.query;
     const bearer = "Bearer " + accessToken;
@@ -53,7 +53,7 @@ router.get("/tracks", authenticateUser, async (req: RequestWithUser, res: Respon
     }
 });
 
-router.get("/artists", authenticateUser, async (req: RequestWithUser, res: Response) => {
+router.get("/artists", authenticateUser, refreshAuthenticationToken, async (req: RequestWithUser, res: Response) => {
     const { accessToken } = req.user;
     const { limit = 25, offset = 0 } = req.query;
     const bearer = "Bearer " + accessToken;
@@ -79,7 +79,7 @@ router.get("/artists", authenticateUser, async (req: RequestWithUser, res: Respo
     }
 });
 
-router.get("/genres", authenticateUser, async (req: RequestWithUser, res: Response) => {
+router.get("/genres", authenticateUser, refreshAuthenticationToken, async (req: RequestWithUser, res: Response) => {
     const { accessToken } = req.user;
     const limit = 50; // The limit of artists I can get from Spotify.
     const bearer = "Bearer " + accessToken;
