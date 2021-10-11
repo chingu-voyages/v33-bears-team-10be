@@ -1,7 +1,8 @@
 import { Router, Response, NextFunction } from 'express';
 import { Strategy as SpotifyStrategy } from 'passport-spotify';
-import passport from 'passport';
+import passport, { use } from 'passport';
 import { RequestWithUser, User } from '../types/User';
+import axios from 'axios';
 
 const router = Router();
 
@@ -18,7 +19,11 @@ passport.use(
             clientSecret,
             callbackURL,
         },
-        (accessToken, _refreshToken, _expires_in, profile, done) => {
+        (accessToken, refreshToken, expires_in, profile, done) => {
+            // Get expiration
+            const now = new Date();
+            const tokenExpiration = new Date(now.getTime() + (1000 * expires_in));
+
             // profile image returns as an object, but typescript declares it as a [string], so we cant access value without the below code.
             const profileImageArr = <[{ value: string }]>(<unknown>profile.photos);
             let profileImage: string | undefined;
@@ -35,6 +40,8 @@ passport.use(
                 profileImage,
                 product: profile.product,
                 id: profile.id,
+                refreshToken,
+                tokenExpiration
             };
             return done(null, user);
         },
@@ -81,10 +88,15 @@ router.get('/logout', (req, res) => {
     res.sendStatus(204);
 });
 
-router.get('/verify', authenticateUser, (req, res) => {
+router.get('/verify', authenticateUser, (req: RequestWithUser, res) => {
     // Make sure the access token isnt sent along as json.
-    const response: User = <User>{ ...req.user };
-    response.accessToken = 'Access Verified';
+    const { user } = req;
+    const response = {
+        displayName: user.displayName,
+        profileImage: user.profileImage,
+        product: user.product,
+        id: user.id,
+    }
     res.json(response);
 });
 
@@ -101,4 +113,53 @@ function authenticateUser(req: RequestWithUser, res: Response, next: NextFunctio
     res.send({ message: 'user needs to be logged in' });
 }
 
-export { router, authenticateUser };
+// Route middleware to check if the current access token is expired, and refress it.
+async function refreshAuthenticationToken(req: RequestWithUser, res: Response, next: NextFunction): Promise<void> {
+    // Check if token is expired
+    const now = new Date();
+    if (now > req.user.tokenExpiration) {
+        console.trace('Refreshing user token: ', req.user.accessToken);
+        try {
+            // Encode client id and secret to base 64
+            const authToken =  Buffer.from(`${clientID}:${clientSecret}`).toString('base64');
+            const authorizationHeader = `Basic  ${authToken}`;
+
+            // Encode parameters to form-urlencoded
+            const params = new URLSearchParams({
+                grant_type: 'refresh_token',
+                refresh_token: req.user.refreshToken,
+            });
+
+            const { data } = await axios.post(
+                'https://accounts.spotify.com/api/token',
+                params.toString()
+                ,
+                {
+                    headers: {
+                        Authorization: authorizationHeader,
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    }
+                }
+            );
+
+            if (data.access_token) {
+                req.user.accessToken = data.access_token;
+                req.user.tokenExpiration = new Date(now.getTime() + (1000 * data.expires_in));
+            } else {
+                // I don't know how this happened, but I guess I'll pass this off
+                console.error(data);
+                next({
+                    status: 400,
+                    message: 'Expected \'access_token\', recieved ' + data
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            next(error);
+        }
+    }
+
+    return next();
+}
+
+export { router, authenticateUser, refreshAuthenticationToken };
